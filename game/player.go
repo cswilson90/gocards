@@ -27,7 +27,7 @@ func (p *Player) Hand() []*Card {
 // Returns an error if the is already in teh player's hand.
 func (p *Player) AddCardToHand(card *Card) error {
 	if p.findCardInHand(card) != -1 {
-		fmt.Errorf("Card %v already in player %v's hand", card.id, p.id)
+		return fmt.Errorf("Card %v already in player %v's hand", card.id, p.id)
 	}
 
 	p.hand = append(p.hand, card)
@@ -84,4 +84,17 @@ func (p *Player) sortHand() {
 	sort.Slice(p.hand, func(i, j int) bool {
 		return p.hand[i].id < p.hand[j].id
 	})
+}
+
+// hasCardOfSuit returns whether to player holds a card with the given suit.
+func (p *Player) hasCardOfSuit(suit uint) bool {
+	index := sort.Search(len(p.hand), func(i int) bool {
+		return p.hand[i].Suit() == suit
+	})
+
+	if index < len(p.hand) && p.hand[index].Suit() == suit {
+		return true
+	}
+
+	return false
 }

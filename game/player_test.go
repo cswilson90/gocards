@@ -17,6 +17,10 @@ func PlayerTest(t *testing.T) {
 		t.Error("New player's hand should not contain card 0")
 	}
 
+	if player.hasCardOfSuit(card0.Suit()) {
+		t.Errorf("New player's hand contains card of suit %v", card0.Suit());
+	}
+
 	err := player.AddCardToHand(card0)
 	if err != nil {
 		t.Error("Error adding card 0 to player's empty hand")
@@ -48,6 +52,15 @@ func PlayerTest(t *testing.T) {
 
 	if !player.HandContainsCard(card13) {
 		t.Error("Hand does not contain card 13 after it was added")
+	}
+
+	if !player.hasCardOfSuit(card13.Suit()) {
+		t.Error("Hand does not contain card of suit of card 13 after card 13 has been added")
+	}
+
+	card52 := newCard(52)
+	if player.hasCardOfSuit(card52.Suit()) {
+		t.Error("Hand contains card with same suit as card 52 despite one not being added")
 	}
 
 	expectedHand := []*Card{card0, card2, card13, card32}
